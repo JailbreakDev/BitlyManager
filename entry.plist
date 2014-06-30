@@ -1,0 +1,10 @@
+{
+    entry = {
+	bundle = BitlyManager;
+	cell = PSLinkCell;
+	detail = BitlyManagerListController;
+	icon = BitlyManager.png;
+	isController = 1;
+	label = BitlyManager;
+    };
+}

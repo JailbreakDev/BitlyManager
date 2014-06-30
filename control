@@ -1,0 +1,7 @@
+Package: com.sharedroutine.bitlymanager
+Name: Bitly Manager
+Author: sharedRoutine
+Architecture: iphoneos-arm
+Maintainer: Jack
+Section: Tweaks
+Version: 1.0

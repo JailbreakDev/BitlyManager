@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>BitlyManager by Jack (@sharedRoutine)</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.sharedroutine.bitlymanager</string>
+			<key>key</key>
+			<string>kEnabled</string>
+			<key>label</key>
+			<string>Enabled</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Settings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>cellClass</key>
+			<string>SREditTextCell</string>
+			<key>defaults</key>
+			<string>com.sharedroutine.bitlymanager</string>
+			<key>key</key>
+			<string>kBitlyUserName</string>
+			<key>label</key>
+			<string>Username</string>
+			<key>id</key>
+			<string>bitlyusername</string>
+			<key>noAutoCorrect</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSecureEditTextCell</string>
+			<key>cellClass</key>
+			<string>SREditTextCell</string>
+			<key>placeholder</key>
+			<string>Enter your Password here</string>
+			<key>label</key>
+			<string>Password</string>
+			<key>id</key>
+			<string>bitlypassword</string>
+			<key>noAutoCorrect</key>
+			<true/>
+			<key>get</key>
+			<string>getPasswordForSpecifier:</string>
+			<key>set</key>
+			<string>setPassword:forSpecifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>action</key>
+			<string>loginToBitly</string>
+			<key>label</key>
+			<string>Login</string>
+			<key>id</key>
+			<string>bitlyLoginButton</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>defaults</key>
+			<string>com.sharedroutine.bitlymanager</string>
+			<key>key</key>
+			<string>kBitlyAccessToken</string>
+			<key>label</key>
+			<string>Access Token</string>
+			<key>id</key>
+			<string>bitly_access_token</string>
+			<key>enabled</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>User Link History</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>PSBitlyUserHistoryViewController</string>
+			<key>label</key>
+			<string>User Link History</string>
+			<key>id</key>
+			<string>bitlyuserhistory</string>
+			<key>enabled</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Shorten URLs</string>
+			<key>footerText</key>
+			<string>You can use the Textfield above to short your long URLs but you can also use the Action Menu Plugin to quickly short selected URLs.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>cellClass</key>
+			<string>SREditTextCell</string>
+			<key>placeholder</key>
+			<string>Paste long URL here</string>
+			<key>defaults</key>
+			<string>com.sharedroutine.bitlymanager</string>
+			<key>id</key>
+			<string>bitlyurltextfield</string>
+			<key>noAutoCorrect</key>
+			<true/>
+			<key>key</key>
+			<string>kBitlyLongURL</string>
+			<key>enabled</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>cellClass</key>
+			<string>SREditTextCell</string>
+			<key>placeholder</key>
+			<string>Short URL</string>
+			<key>defaults</key>
+			<string>com.sharedroutine.bitlymanager</string>
+			<key>id</key>
+			<string>bitlyshorturltextfield</string>
+			<key>noAutoCorrect</key>
+			<true/>
+			<key>key</key>
+			<string>kBitlyShortURL</string>
+			<key>enabled</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>action</key>
+			<string>shortenURL</string>
+			<key>label</key>
+			<string>Shorten it</string>
+			<key>id</key>
+			<string>bitlyshortbutton</string>
+			<key>enabled</key>
+			<false/>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Bitly Manager</string>
+</dict>
+</plist>
