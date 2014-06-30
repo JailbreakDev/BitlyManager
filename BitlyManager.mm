@@ -22,7 +22,7 @@
     
 	if(_specifiers == nil) {
 	
-	NSMutableArray *specs = [[[self loadSpecifiersFromPlistName:@"BitlyManager" target:self] retain] mutableCopy];
+	NSMutableArray *specs = [[self loadSpecifiersFromPlistName:@"BitlyManager" target:self] mutableCopy];
 	
 	BOOL isLoggedIn = FALSE;
 	
@@ -75,7 +75,7 @@
 
 		UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Saving Password" message:[NSString stringWithFormat:@"Error = %@\nPlease show this to the developer",pwError.description] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
 		[av show];
-		[av release];
+		//[av release];
 	}
 }
 
@@ -104,7 +104,7 @@
 
 		UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Loggin Out" message:[NSString stringWithFormat:@"Error = %@\nPlease show this to the developer",pwError.description] delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
 		[av show];
-		[av release];
+		//[av release];
 		return;
 	}
 	[self setPreferenceValue:@"" specifier:[self specifierForID:@"bitly_access_token"]];
@@ -172,7 +172,7 @@
 
 	UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
 	[av show];
-	[av release];
+	//[av release];
 }
 
 - (void)connection:(BitlyConnection *)connection didShortURLWithReturningInfo:(NSDictionary *)info {

@@ -7,8 +7,12 @@
 @interface AMBitlyManager : NSObject <BitlyConnectionDelegate,UIAlertViewDelegate> {
 	NSDictionary *_preferences;
 	BitlyConnection *connection;
+	BOOL multipleURLS;
+	NSMutableArray *shortLinks;
+	int count, arrayCount;
+	NSString *link;
 }
--(void)shortenURL:(NSString *)url;
+-(void)shortenURLs:(NSArray *)urls;
 @end
 
 @interface UIResponder (AMBitlyManager)

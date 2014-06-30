@@ -38,7 +38,7 @@
 
 	UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
 	[av show];
-	[av release];
+	//[av release];
 }
 
 - (void)connection:(BitlyConnection *)connection didLoadHistoryWithItems:(NSArray *)items {
@@ -98,7 +98,7 @@
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Link Actions" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Copy Link",@"Open in Safari",nil];
     av.tag = indexPath.row;
     [av show];
-    [av release];
+    //[av release];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

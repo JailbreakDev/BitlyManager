@@ -6,6 +6,7 @@ BitlyManager_FILES = BitlyManager.mm SSKeychain.m BitlyConnection.m UIViewContro
 BitlyManager_INSTALL_PATH = /Library/PreferenceBundles
 BitlyManager_FRAMEWORKS = UIKit Security CoreGraphics
 BitlyManager_PRIVATE_FRAMEWORKS = Preferences
+BitlyManager_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
