@@ -2,86 +2,43 @@
 
 @implementation AMBitlyManager
 
+-(void)showHUDWithMessage:(NSString *)message {
+
+	UIProgressHUD *hud = [[UIProgressHUD alloc] initWithFrame:CGRectZero];
+	[hud setText:message];
+	[hud showInView:[UIViewController topMostController].view];
+	[hud performSelector:@selector(hide) withObject:nil afterDelay:1.5];
+}
+
 -(id)init {
 
 	self = [super init];
 
 	if (self) {
-		_preferences = [NSDictionary dictionaryWithContentsOfFile:PLIST_PATH] ?: [[NSDictionary alloc] init];
 		connection = [[BitlyConnection alloc] init];
 		[connection setDelegate:self];
-		multipleURLS = FALSE;
-		shortLinks = [[NSMutableArray alloc] init];
 		link = [[NSString alloc] init];
-		count = 0;
-		arrayCount = 0;
 	}
 
 	return self;
 }
 
--(void)shortenURLs:(NSArray *)urls {
-
-	multipleURLS = (urls.count > 1);
-	[shortLinks removeAllObjects];
-	arrayCount = urls.count;
-	NSString *accessToken = _preferences[@"kBitlyAccessToken"];
-	for (NSTextCheckingResult *result in urls) {
-		[connection shortURL:result.URL.absoluteString withAccessToken:accessToken];
-	}
+-(void)shortenURL:(NSString *)url; {
+	NSString *accessToken = [BitlyPreferences getAccessToken];
+	[connection shortURL:url withAccessToken:accessToken];
 }
 
 #pragma mark - BitlyConnectionDelegate
 
-- (void)connection:(BitlyConnection *)connection didShortURLWithReturningInfo:(NSDictionary *)info {
-
-	if (arrayCount == count) {
-		link = [shortLinks componentsJoinedByString:@"\n"];
-		UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Shortened" message:[NSString stringWithFormat:@"Your Links (%d) have been shortened: %@",count,link] delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:@"Copy",nil];
-		[av show];
-	} else {
-		[shortLinks addObject:info[@"aggregate_link"]];
-	}
-	count++;
+- (void)connection:(BitlyConnection *)con didShortURLWithReturningInfo:(NSDictionary *)info {
+	link = info[@"aggregate_link"];
+	[self showHUDWithMessage:[NSString stringWithFormat:@"Your Link has been shortened: %@",link]];
+	[[UIPasteboard generalPasteboard] setString:link];
 }
 
 - (void)connection:(BitlyConnection *)connection didFailWithMessage:(NSString *)message {
-	UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles:nil];
-	[av show];
-	//[av release];
+	[self showHUDWithMessage:message];
 }
-
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-
-	if (alertView.cancelButtonIndex == buttonIndex) {
-		return;
-	}
-
-	NSString *buttonTitle = [alertView buttonTitleAtIndex:buttonIndex];
-
-	if ([buttonTitle isEqualToString:@"Copy"]) {
-
-		[[UIPasteboard generalPasteboard] setString:link];
-
-	} 
-}
-
-/*
--(void)dealloc {
-
-	[shortLinks release];
-	shortLinks = nil;
-	[connection release];
-	connection = nil;
-	[_preferences release];
-	_preferences = nil;
-	[link release];
-	link = nil;
-	[super dealloc];
-}
-*/
 
 @end
 
@@ -95,8 +52,9 @@
 }
 
 - (BOOL)canExecute {
-    
-	return [[self selectedTextualRepresentation] length] > 0;
+    BOOL selected = [[self selectedTextualRepresentation] length] > 0;
+    BOOL loggedIn = [BitlyPreferences getAccessToken].length > 0;
+	return selected && loggedIn;
 }
 
 - (void)shortenURL {
@@ -104,16 +62,13 @@
     AMBitlyManager *bitlyManager = [[AMBitlyManager alloc] init];
     NSString *selection = [self selectedTextualRepresentation];
     NSDataDetector *detect = [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
-
-    NSArray *matches = [detect matchesInString:selection options:0 range:NSMakeRange(0, [selection length])];
+    NSTextCheckingResult *match = [detect firstMatchInString:selection options:0 range:NSMakeRange(0, [selection length])];
     
-    if (matches.count == 0) {
+    if (!match) {
         return;
     }
     	
-    [bitlyManager shortenURLs:matches];
-    [bitlyManager release];
-    [detect release];
+    [bitlyManager shortenURL:match.URL.absoluteString];
 }
 
 @end

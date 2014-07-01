@@ -1,18 +1,14 @@
 #import "../ActionMenu/ActionMenu.h"
 #import "../UIViewController+Additions.h"
 #import "../BitlyConnection.h"
+#import "../UIProgressHUD.h"
+#import "../BitlyPreferences.h"
 
-#define PLIST_PATH @"/var/mobile/Library/Preferences/com.sharedroutine.bitlymanager.plist"
-
-@interface AMBitlyManager : NSObject <BitlyConnectionDelegate,UIAlertViewDelegate> {
-	NSDictionary *_preferences;
+@interface AMBitlyManager : NSObject <BitlyConnectionDelegate> {
 	BitlyConnection *connection;
-	BOOL multipleURLS;
-	NSMutableArray *shortLinks;
-	int count, arrayCount;
 	NSString *link;
 }
--(void)shortenURLs:(NSArray *)urls;
+-(void)shortenURL:(NSString *)url;
 @end
 
 @interface UIResponder (AMBitlyManager)

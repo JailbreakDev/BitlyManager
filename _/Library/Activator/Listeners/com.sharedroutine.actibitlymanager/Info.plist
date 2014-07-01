@@ -1,0 +1,7 @@
+{
+	title = "Bit.ly Manager";
+	description = "Shorten an URL from Pasteboard";
+	"small-icons" = (
+		"/Library/PreferenceBundles/BitlyManager.bundle/BitlyManager.png",
+	);
+}

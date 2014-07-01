@@ -5,17 +5,22 @@
 
 @implementation BitlyConnection
 
+-(void)showHUDWithMessage:(NSString *)message {
+
+	if (!HUD) {
+		HUD = [[UIProgressHUD alloc] initWithFrame:CGRectZero];
+	}
+
+	[HUD setText:message];
+	[HUD showInView:[UIViewController topMostController].view];
+}
+
 -(void)shortURL:(NSString *)url withAccessToken:(NSString *)accessToken {
 
-	HUD = [[UIProgressHUD alloc] initWithFrame:CGRectZero];
-    [HUD setText:@"Shortening..."];
-    [HUD showInView:[UIViewController topMostController].view];
-
-    NSLog(@"CLass: %@",NSStringFromClass([self.delegate class]));
+    [self showHUDWithMessage:@"Shortening..."];
 
     if (url.length <= 0 || accessToken.length <= 0) {
     	[HUD hide];
-    	//[HUD release];
     	[[self delegate] connection:self didFailWithMessage:@"URL or AccessToken can not be empty"];
     	return;
     }
@@ -24,51 +29,43 @@
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60];
     [request setHTTPMethod:@"GET"];
 
-    NSLog(@"CLass 2: %@",NSStringFromClass([self.delegate class]));
-
     id <BitlyConnectionDelegate> blockDelegate = self.delegate;
     BitlyConnection *blockSelf = self;
 
-    NSLog(@"CLass 3: %@",NSStringFromClass([blockDelegate class]));
-
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-    		NSLog(@"CLass 4: %@",NSStringFromClass([blockDelegate class]));
-    		[HUD hide];
-			if (error) {
-    			[blockDelegate connection:blockSelf didFailWithMessage:@"The Connection failed due to an error. Please try again later."];
-    			return;
-    		}
 
-    		if (((NSHTTPURLResponse *)response).statusCode != 200 && ((NSHTTPURLResponse *)response).statusCode != 304) {
-    			[blockDelegate connection:blockSelf didFailWithMessage:@"Invalid Response from Server."];
-    			return;
-    		}
+    	[HUD hide];
+		if (error) {
+    		[blockDelegate connection:blockSelf didFailWithMessage:@"The Connection failed due to an error. Please try again later."];
+    		return;
+    	}
 
-			NSDictionary *jsonDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    	if (((NSHTTPURLResponse *)response).statusCode != 200 && ((NSHTTPURLResponse *)response).statusCode != 304) {
+    		[blockDelegate connection:blockSelf didFailWithMessage:@"Invalid Response from Server."];
+    		return;
+    	}
+
+		NSDictionary *jsonDict = (NSDictionary *)[NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 			
-			if (!jsonDict) {
-				[blockDelegate connection:blockSelf didFailWithMessage:@"Received Data is invalid"];
-           		return;
-			}
-        
-        	NSDictionary *info = ((NSDictionary *)jsonDict[@"data"]).allValues[0] ?: NULL;
+		if (!jsonDict) {
+			[blockDelegate connection:blockSelf didFailWithMessage:@"Received Data is invalid"];
+           	return;
+		}
 
-        	if (!info) {
-        		[blockDelegate connection:blockSelf didFailWithMessage:@"Received Data is invalid"];
-            	return;    		
-        	}
+        NSDictionary *info = ((NSDictionary *)jsonDict[@"data"]).allValues[0];
+        if (!info) {
+        	[blockDelegate connection:blockSelf didFailWithMessage:@"Received Data is invalid"];
+            return;    		
+        }
 
-        	NSLog(@"CLass 5: %@",NSStringFromClass([blockDelegate class]));
-    		[blockDelegate connection:blockSelf didShortURLWithReturningInfo:info];
+        [blockDelegate connection:blockSelf didShortURLWithReturningInfo:info];
            
     }];
 }
 
 -(void)requestAccessTokenForUsername:(NSString *)userName andPassword:(NSString *)password {
 
-	HUD = [[UIProgressHUD alloc] initWithFrame:CGRectZero];
-    [HUD setText:@"Requesting Access Token..."];
-    [HUD showInView:[UIViewController topMostController].view];
+    [self showHUDWithMessage:@"Requesting Access Token..."];
 
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"https://api-ssl.bitly.com/oauth/access_token"] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60];
 	NSString *authStr = [NSString stringWithFormat:@"%@:%@",userName,password];
@@ -86,14 +83,12 @@
 		if (error) {
     		[blockDelegate connection:blockSelf didFailWithMessage:@"The Connection failed due to an error. Please try again later."];
     		[HUD hide];
-    		//[HUD release];
     		return;
     	}
 
     	if (((NSHTTPURLResponse *)response).statusCode != 200) {
     		[blockDelegate connection:blockSelf didFailWithMessage:@"Invalid Response from Server."];
     		[HUD hide];
-    		//[HUD release];
     		return;
     	}
 
@@ -104,13 +99,11 @@
     	if (invalidLoginRange.location != NSNotFound) {
     		[blockDelegate connection:blockSelf didFailWithMessage:@"Invalid Login. Please check your login details"];
     		[HUD hide];
-    		//[HUD release];
     		return;
     	}
 
     	[HUD done];
     	[HUD performSelector:@selector(hide) withObject:nil afterDelay:0.5];
-    	//[HUD release];
     	[blockDelegate connection:blockSelf didReceiveAccessToken:acToken];
     		
     }];
@@ -118,9 +111,7 @@
 
 -(void)requstLinkHistoryForAccessToken:(NSString *)accessToken {
 
-	HUD = [[UIProgressHUD alloc] initWithFrame:CGRectZero];
-    [HUD setText:@"Requesting User History..."];
-    [HUD showInView:[UIViewController topMostController].view];
+    [self showHUDWithMessage:@"Requesting User History..."];
 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://api-ssl.bitly.com/v3/user/link_history?access_token=%@",accessToken]] cachePolicy:NSURLCacheStorageAllowed timeoutInterval:60];
     [request setHTTPMethod:@"GET"];
@@ -133,14 +124,12 @@
     	if (error) {
     		[blockDelegate connection:blockSelf didFailWithMessage:@"The Connection failed due to an error. Please try again later."];
     		[HUD hide];
-    		//[HUD release];
     		return;
     	}
 
     	if (((NSHTTPURLResponse *)response).statusCode != 200) {
     		[blockDelegate connection:blockSelf didFailWithMessage:@"Invalid Response from Server."];
     		[HUD hide];
-    		//[HUD release];
     		return;
     	}
 
@@ -154,18 +143,8 @@
 
     	[HUD done];
     	[HUD performSelector:@selector(hide) withObject:nil afterDelay:0.5];
-    	//[HUD release];
     	[blockDelegate connection:blockSelf didLoadHistoryWithItems:(NSArray *)jsonDict[@"data"][@"link_history"]];
     }];
 }
-
-/*
--(void)dealloc {
-
-	[HUD release];
-	HUD = nil;
-	[super dealloc];
-}
-*/
 
 @end
