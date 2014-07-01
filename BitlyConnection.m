@@ -52,7 +52,7 @@
            	return;
 		}
 
-        NSDictionary *info = ((NSDictionary *)jsonDict[@"data"]).allValues[0];
+        NSDictionary *info = (NSDictionary *)jsonDict[@"data"][@"link_save"];
         if (!info) {
         	[blockDelegate connection:blockSelf didFailWithMessage:@"Received Data is invalid"];
             return;    		
