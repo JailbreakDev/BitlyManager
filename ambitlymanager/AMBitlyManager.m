@@ -47,17 +47,17 @@
 + (void)load {
     
 	//id <AMMenuItem> menuItem = 
-	[[UIMenuController sharedMenuController] registerAction:@selector(shortenURL) title:@"Bit.ly" canPerform:@selector(canExecute)];
+	[[UIMenuController sharedMenuController] registerAction:@selector(bitlyManager_shortenURL) title:@"Bit.ly" canPerform:@selector(bitlyManager_canExecute)];
     //menuItem.image = [UIImage imageWithContentsOfFile:([UIScreen mainScreen].scale == 2.0f) ? @"/Library/ActionMenu/Plugins/AMBitlyManager@2x.png" : @"/Library/ActionMenu/Plugins/AMBitlyManager.png"];
 }
 
-- (BOOL)canExecute {
+- (BOOL)bitlyManager_canExecute {
     BOOL selected = [[self selectedTextualRepresentation] length] > 0;
     BOOL loggedIn = [BitlyPreferences getAccessToken].length > 0;
 	return selected && loggedIn;
 }
 
-- (void)shortenURL {
+- (void)bitlyManager_shortenURL {
     
     AMBitlyManager *bitlyManager = [[AMBitlyManager alloc] init];
     NSString *selection = [self selectedTextualRepresentation];

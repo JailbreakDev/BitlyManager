@@ -12,6 +12,6 @@
 @end
 
 @interface UIResponder (AMBitlyManager)
-- (BOOL)canExecute;
-- (void)shortenURL;
+- (BOOL)bitlyManager_canExecute;
+- (void)bitlyManager_shortenURL;
 @end
