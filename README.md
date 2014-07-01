@@ -3,6 +3,8 @@ BitlyManager
 
 Bit.ly Manager for iOS - Shorten Links using Action Menu and manage your Links
 
+SSKeychain by ([soffes](https://github.com/soffes/sskeychain))
+
 Images say more than thousand words...
 
 ![Alt text](http://cl.ly/WLTx/IMG_0803.PNG "BitlyManager")
